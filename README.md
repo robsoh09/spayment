@@ -136,8 +136,6 @@ The scope of the solution in this case:
 
 A customer will order  the product, go to the payment landing page, enter required details and submit an order request. 
 
-Stripe Press frontend Client route  generates the intended parameters and relays to the backend route 
-
 The backend route will in turn, make a Stripe PaymentIntent system call to Stripe 
 
 Stripe returns a new Payment Intent to the e-store frontend 
@@ -169,8 +167,7 @@ the backend service will invoke this code:
 This creates an Intent with the amount required and currency in USD. 
 The paymentIntentId is then stored in the global variable in later section. 
 
-On the frontend, it will proceed to load the payment form in checkout.hbs - i embedded this directly in checkout.hbs as a fast demo. 
-
+On the frontend, it will proceed to load the payment form in checkout.hbs along with checkout.js for form eventDefault like preventing a page reload - i embedded this directly in checkout.hbs as a fast demo. 
  <script> const stripe = Stripe('{{spk}}');
               const options = {
               clientSecret: '{{client_secret}}',
@@ -180,10 +177,9 @@ On the frontend, it will proceed to load the payment form in checkout.hbs - i em
               paymentElement.mount('#payment-element') </script> 
             
 This mounts the payment element into the form, the clientSecret is loaded as an option so when the user clicks on the paybutton, the form will commit and transmits - this is written as a client side 
-checkout.js script. I could have combined the above script into checkout.js as a matter of fact. 
+checkout.js script. I could have combined the above script into checkout.js, looking back. 
 
-Stripe.ConfirmPayment 
-
+Stripe.ConfirmPayment sdk was used in the frontend to ensure form status was locked to the event
 const {error} = await stripe.confirmPayment({
     //elements instance that was used to create the Payment Element
     elements,
@@ -199,7 +195,7 @@ const {error} = await stripe.confirmPayment({
 
 This returns confirmPayment sdk call and since elements have already a clientSecret called upon, the payment was succesful and got redirected to success. 
 
-at the success page, 
+at the success.hbs page, 
 i have included the below handlebar responses on the frontend route 
       <p>Payment Id: {{paymentId}}</p>
       <p>Book title: {{bookTitle}}</p>
@@ -226,8 +222,6 @@ const paymentIntent = await stripe.paymentIntents.retrieve(
     paymentValue: paymentValue,
     paymentId: paymentId,
     paymentStatus: paymentStatus
-
-
   });
 
 
