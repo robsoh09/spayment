@@ -11,7 +11,7 @@ What a successful outcome (in this case, customer payment)
 This helps me avoid overbuilding a demo when its required and keeps the solution straightforard.
 
 2. Business needs to Business logic 
-I always define a flow and map it accordingly. In the assignment: 
+I define a flow and map it accordingly. In the assignment: 
 Customer -> Purchase -> Submits Payment -> Return Success / Failure  
 
 This makes it easy for both the business and tech  to follow what is happening.
@@ -46,7 +46,7 @@ A working demo provides this approach. Once this is confirmed, i will present th
 
 Solution learning process:
 
-The requirement is to build a payment service using Stripe Elements for Stripe Press. 
+1. The requirement is to build a payment service using Stripe Elements for Stripe Press. 
 Acting as a newly onboarded Solution Engineer, I went through [docs.stripe.com ](https://docs.stripe.com/get-started)
 Steps I have taken to familarize with the Stripe account onboarding: 
 created a Stripe Account and login to the Dashboard
@@ -54,6 +54,7 @@ Enabled payments on the Dashboard
 Enabled API keys for dev work 
 
 
+2. API understanding
 Docs.stripe.com provided a starter guide 
 https://docs.stripe.com/get-started/development-environment. I used this to evaluate using the nodejs sdk and API endpoints response. 
 I also started a mockup of the Stripe Press Assiignment architecture as i went along with the sdk learning. This was done using Stripe Customer Case Studies. 
@@ -129,6 +130,8 @@ pi_3SarNA60m4YgZHoW1u66hQU7
   transfer_group: null
 }
 
+3. Define Solution Scope 
+
 The scope of the solution in this case:
 
 A customer will order  the product, go to the payment landing page, enter required details and submit an order request. 
@@ -145,11 +148,12 @@ Stripe will proceed to process the payment and return the payment status via web
 
 The front end is updated with the payment status for the client. 
 
+4. Implementation & Outcome 
 Based on this i have added more routes to the existing assignment code, this is by far, the fastest route to showcase a working payment process based on https://docs.stripe.com/payments/quickstart. 
 As in an actual production system, there would be a database to store item purchase and payment Id records, i used a global variable to simulate this in the backend service to return payment status when a successful 
 payment was conducted. 
 
-The API used in this demo: 
+The APIs used in this demo: 
 Stripe.paymentIntent creation whenever a user clicked on the checkout flow using a Purchase button link -> http://localhost:3000/checkout?item=1
 
 the backend service will invoke this code:
@@ -178,6 +182,8 @@ On the frontend, it will proceed to load the payment form in checkout.hbs - i em
 This mounts the payment element into the form, the clientSecret is loaded as an option so when the user clicks on the paybutton, the form will commit and transmits - this is written as a client side 
 checkout.js script. I could have combined the above script into checkout.js as a matter of fact. 
 
+Stripe.ConfirmPayment 
+
 const {error} = await stripe.confirmPayment({
     //elements instance that was used to create the Payment Element
     elements,
@@ -194,9 +200,7 @@ const {error} = await stripe.confirmPayment({
 This returns confirmPayment sdk call and since elements have already a clientSecret called upon, the payment was succesful and got redirected to success. 
 
 at the success page, 
-i have included the below handlebar responses: 
-
-<div class="mt-20 text-center text-secondary border-placeholder">
+i have included the below handlebar responses on the frontend route 
       <p>Payment Id: {{paymentId}}</p>
       <p>Book title: {{bookTitle}}</p>
       <p>Paid: ${{paymentValue}} USD</p>
@@ -206,20 +210,38 @@ i have included the below handlebar responses:
     </div>
   </div>
 </main>
-<script>
-  const url = new URL(window.location.href);
-  // Remove thepayment secret by using searchParams and delete 
-  url.searchParams.delete("payment_intent_client_secret");
-  //browser redirect without reloading 
-  window.history.replaceState({}, document.title, url.toString());
-</script>
 
-I also removed the payment secret directly and reloaded the return URL in this format: http://localhost:3000/success?payment_intent=pi_3SaxVc60m4YgZHoW1H1IbS8o&redirect_status=succeeded
-In this case, only the payment intent Id is revealed directly. 
+on the backend success route: 
+a sdk call was made to retrieve the pid or paymentIntentid and get the payment response and status. 
+const paymentIntent = await stripe.paymentIntents.retrieve(
+  pid
+   );
+  console.log(paymentIntent);
+  let paymentValue = (paymentIntent.amount * 0.01);
+  let paymentId = (paymentIntent.id);
+  let paymentStatus = (paymentIntent.status);
+  console.log(paymentValue);
+  res.render('success', {
+    bookTitle: bookTitle,
+    paymentValue: paymentValue,
+    paymentId: paymentId,
+    paymentStatus: paymentStatus
 
-I have also included instructions to clone and run this in the customer demo solution PDF attached. 
+
+  });
 
 
+Outcome: 
+http://localhost:3000/success?payment_intent=pi_3SaxVc60m4YgZHoW1H1IbS8o&redirect_status=succeeded is the result when a payment is made successfully via Stripe Elements. 
+Information such as book title, payment value and the payment intent Id and status were displayed.  
+
+
+5. Additional Scope I would like to add:
+This only showcases payment but not adding of shipping address, billing or taxes. An actual payment will require all these information and also sending of email notifications once the order is completed.
+Webhook integration on business logic such as inventory mapping when a successful payment is conducted can be considered to help customers.
+
+
+I have also included instructions to clone and run this in the customer demo solution PDF. 
 
 
   
