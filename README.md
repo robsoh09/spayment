@@ -145,7 +145,7 @@ Webhook integration on business logic such as inventory mapping when a successfu
 
 
 
-I have also included instructions to clone and run this in the customer demo solution PDF as attached. 
+I have also included instructions in the customer demo solution PDF to clone this git repository and run it. Please refer to the PDF. 
 
 
   
