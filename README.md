@@ -6,7 +6,7 @@ This document explains how I approach a take-home payment assignment from a pres
 
 Before proceed I first clarify:
 What the business is trying to do  
-What a successful outcome (in this case, customer payment) 
+What is a successful outcome (in this case, customer payment) 
 
 This helps me avoid overbuilding a demo when its required and keeps the solution straightforard.
 
