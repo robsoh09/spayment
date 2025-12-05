@@ -41,7 +41,8 @@ A visual representation at each step aligned to the business outcome
 
 6.  Next Steps
    
-my focus is to ensure customer can have the best understanding and seeing is believing 
+my focus is to ensure customer can have the best understanding and seeing is believing. 
+
 A working demo provides this approach. Once this is confirmed, i will present the common risks(if any) and will proceed to the next step with the customer.
 
 Solution Assignment Overview: 
