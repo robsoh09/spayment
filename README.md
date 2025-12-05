@@ -1,4 +1,6 @@
 Stripe Assignment: Rob Soh Ming Yang 
+
+
 This document explains how I approach a take-home payment assignment from a presales perspective. My focus is to keep the solution torwards the business needs.
 
 1. Start With the Goal and functional requirements 
